@@ -1,5 +1,8 @@
 import adafruit_dht
+from pubnub_client import publish_msg
 import time
+import datetime
+
 
 #IO Pins
 from board import D2 #GPIO 2
@@ -13,7 +16,10 @@ try:
     while True:
         try:
             temperature = dht_device.temperature
-            print(f"Temp: ${temperature} ° C")
+            curr_time = datetime.datetime.now()
+            msg = f"{curr_time} Temp: {temperature} ° C"
+            print(msg)
+            publish_msg(msg)
             time.sleep(3)
         except Exception as e:
             print("Error reading temperature: ", e)
