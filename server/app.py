@@ -27,9 +27,21 @@ def sensors():
     return render_template("sensors_monitor.html", sensors=[sensor1, sensor2])
 
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    pass
+    if request.method == "GET":
+        return render_template("login.html")
+    elif request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        if not email:
+            return render_template("login.html", error="Email is Required")
+        if not password:
+            return render_template("login.html", error="Password is Required")
+        
+        #Do DB stuff / login
+
 
 @app.route('/logout')
 def logout():
