@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
 {% block body %}
     <h2>My Sensors</h2>
+    {% for sensor in sensors %}
     <div>
-        <p>Sensor 1</p>
-        <p>2 C</p>
-        <p>Max: 4 C</p>
-        <p>Min -1 C</p>
+        <p>{{ sensor["sensor_name"] }}</p>
+        <p>Current Temperature: {{ sensor["sensor_current"] }}</p>
+        <p>Min: {{ sensor["sensor_min"] }} C</p>
+        <p>Max {{ sensor["sensor_max"] }} C</p>
         <button>Manage</button>
     </div>
+    {% endfor %}
 {% endblock %}

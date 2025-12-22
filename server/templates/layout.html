@@ -7,6 +7,18 @@
     <title>Temp O Matic</title>
 </head>
 <body>
+    <header>
+        <p>Temp O Matic</p>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/sensors">Sensors</a>
+            {% if user_id != None %}
+                <a href="/login">Login</a>
+            {% else %}
+                <a href="/logout">Logout</a>
+            {% end if %}
+        </nav>
+    </header>
     {%  block body %}
     {%  endblock %}
 </body>
