@@ -8,8 +8,17 @@ import datetime
 import asyncio
 
 
+'''
+D2 - Scanner
+D3 - Red LED
+D4 - Buzzer
+D17 - Green LED
+
+'''
+
+
 #IO Pins
-from board import D2, D3, D4 #GPIO PINS
+from board import D2, D3, D4, D17 #GPIO PINS
 
 MIN_TEMP = 20
 
@@ -41,8 +50,12 @@ async def activate_temp_alarms(buzzer, led):
 async def main():
     try:
         dht_device = adafruit_dht.DHT22(D2, use_pulseio=False)
-        led_light = digitalio.DigitalInOut(D3)
-        led_light.direction = digitalio.Direction.OUTPUT
+
+        green_led = digitalio.DigitalInOut(D17)
+        green_led.direction = digitalio.Direction.OUTPUT
+
+        red_led = digitalio.DigitalInOut(D3)
+        red_led.direction = digitalio.Direction.OUTPUT
 
         buzzer = digitalio.DigitalInOut(D4)
         buzzer.direction = digitalio.Direction.OUTPUT
@@ -58,7 +71,10 @@ async def main():
 
                 #LED / Buzzer
                 if temperature < MIN_TEMP:
-                    await activate_temp_alarms(buzzer, led_light)
+                    green_led.value = False
+                    await activate_temp_alarms(buzzer, red_led)
+                else:
+                    green_led.value = True
                 await asyncio.sleep(3)
             except Exception as e:
                 print("Error reading temperature: ", e)
