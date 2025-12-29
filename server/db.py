@@ -4,10 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
-    __tablename__ = "user"
+    __tablename__ = "app_user"
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100))
-    user_id = db.Column(db.String(255))
+    email = db.Column(db.String(100))
     token = db.Column(db.String(50))
     login = db.Column(db.Integer)
     is_admin = db.Column(db.Integer)
@@ -31,8 +31,6 @@ class Scanner(db.Model):
         self.device_name = device_name
         self.user_id = user_id
 
-
-
 class ScannerReading(db.Model):
     __tablename__ = "scanner_reading"
     id = db.Column(db.Integer, primary_key = True)
@@ -45,3 +43,13 @@ class ScannerReading(db.Model):
         self.scan_time = scan_time
         self.temperature = temperature
 
+
+
+def login_user(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    if not user:
+        return None
+    else:
+        row.login = 1
+        db.session.commit()
+    

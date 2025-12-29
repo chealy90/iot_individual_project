@@ -1,7 +1,24 @@
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, request, session
+from flask_sqlalchemy import SQLAlchemy 
+from flask_session import Session
+from dotenv import load_dotenv
+import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+
+#set up db
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URI")
+app.config("SQLALCHEMY_TRACK_MODIFICATIONS") = False
+db = SQLAlchemy(app)
+
+
+
+#set up sessions
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
 
 @app.route('/')
 def index():
@@ -40,7 +57,7 @@ def login():
         if not password:
             return render_template("login.html", error="Password is Required")
         
-        #Do DB stuff / login
+        
 
 
 @app.route('/logout')
