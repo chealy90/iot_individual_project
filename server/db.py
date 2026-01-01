@@ -8,6 +8,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100))
     email = db.Column(db.String(100))
+    password = db.Column(db.String(100))
     token = db.Column(db.String(50))
     login = db.Column(db.Integer)
     is_admin = db.Column(db.Integer)
@@ -36,7 +37,7 @@ class ScannerReading(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     scanner_id = db.Column(db.Integer, db.ForeignKey("scanner.id"))
     scan_time = db.Column(db.DateTime)
-    temperature = db.Columnn(db.Float)
+    temperature = db.Column(db.Float)
 
     def __init__(self, scanner_id, scan_time, temperature):
         self.scanner_id = scanner_id
@@ -45,11 +46,12 @@ class ScannerReading(db.Model):
 
 
 
-def login_user(user_id):
-    user = User.query.filter_by(user_id=user_id).first()
+def find_user_if_exists(email):
+    user = User.query.filter_by(email=email).first()
     if not user:
-        return None
+        return False
     else:
-        row.login = 1
+        user.login = 1
         db.session.commit()
+        return user
     
