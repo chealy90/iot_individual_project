@@ -2,3 +2,4 @@
 /server/aws_env
 /hardware/.env
 /server/.env
+.vscode
