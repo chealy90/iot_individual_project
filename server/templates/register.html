@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block body %}
+<div id="registerForm">
+    <h2>Log in to Tempify</h2>
+    <form action="/register" method="post">
+        {% if error %}
+        <p>{{ error }}</p>
+        {% endif %}
+        <div class="formField">
+            <label for="name">Name</label>
+            <input 
+                type="text" 
+                name="name"
+                required
+                placeholder="John Doe"
+            />
+        </div>
+        <div class="formField">
+            <label for="email">Email</label>
+            <input 
+                type="text" 
+                name="email"
+                required
+                placeholder="example@gmail.com"
+            />
+        </div>
+        <div class="formField">
+            <label for="password">Password</label>
+            <input
+                type="password" 
+                name="password"
+                required
+                placeholder="Your Password"
+            />
+        </div>
+        <div class="formField">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+                type="password" 
+                name="confirmPassword"
+                required
+                placeholder="Confirm Password"
+            />
+        </div>
+        <button type="submit">
+            Register
+        </button>
+    </form>
+</div>
+{% endblock %}
