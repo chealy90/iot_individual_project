@@ -12,10 +12,10 @@
         <nav>
             <a href="/">Home</a>
             <a href="/sensors">Sensors</a>
-            {% if user_id != None %}
-                <a href="/login">Login</a>
-            {% else %}
+            {% if session.get("email") %}
                 <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
             {% endif %}
         </nav>
     </header>

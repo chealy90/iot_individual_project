@@ -2,7 +2,7 @@
 {% block body %}
 <div id="loginForm">
     <h2>Log in to Tempify</h2>
-    <form action="/login" method="post">
+    <form action="/register" method="post">
         {% if error %}
         <p>{{ error }}</p>
         {% endif %}
@@ -27,6 +27,10 @@
         <button type="submit">
             Log In
         </button>
+
+        <p>Don't have an account? <a href="/register">Register Now</a></p>
     </form>
+
+
 </div>
 {% endblock %}

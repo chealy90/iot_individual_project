@@ -13,9 +13,10 @@ class User(db.Model):
     login = db.Column(db.Integer)
     is_admin = db.Column(db.Integer)
 
-    def __init__(self, name, user_id, token, login, is_admin):
+    def __init__(self, name, email, password, token, login, is_admin):
         self.name = name
-        self.user_id = user_id
+        self.email = email
+        self.password = password
         self.token = token
         self.login = login
         self.is_admin = is_admin
@@ -25,7 +26,7 @@ class Scanner(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     device_id = db.Column(db.Integer)
     device_name = db.Column(db.String(50))
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"))
 
     def __init__(self, device_id, device_name, user_id):
         self.device_id = device_id
@@ -55,3 +56,13 @@ def find_user_if_exists(email):
         db.session.commit()
         return user
     
+
+def register_new_user(name, email, password_hash):
+    existing_user = User.query.filter_by(email=email).first()
+    if not existing_user:
+        new_user = User(name, email, password_hash, "", 1, 0)
+        db.session.add(new_user)
+        db.session.commit()
+        return True
+    else:
+        return False
