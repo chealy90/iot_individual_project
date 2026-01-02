@@ -1,4 +1,4 @@
 /hardware/temp_sensor_env/
-/sensor/aws_env
+/server/aws_env
 /hardware/.env
 /server/.env
