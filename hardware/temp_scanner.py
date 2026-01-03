@@ -66,8 +66,13 @@ async def main():
                 temperature = dht_device.temperature
                 curr_time = datetime.datetime.now()
                 msg = f"{curr_time} Temp: {temperature} ° C"
-                print(msg)
-                publish_msg(msg)
+                json_msg = {
+                    "time": curr_time,
+                    "temperature": temperature
+
+                }
+                print(json_msg)
+                publish_msg(json_msg)
 
                 #LED / Buzzer
                 if temperature < MIN_TEMP:

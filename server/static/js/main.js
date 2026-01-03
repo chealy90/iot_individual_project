@@ -1,5 +1,5 @@
-let pubnub
 let appChannel = "IotTempSensorChannel"
+let pubnub
 
 
 const setupPubNub = () => {
@@ -15,16 +15,24 @@ const setupPubNub = () => {
     pubnub.addListener({
         status: (s) => {
             console.log("Status", s.category)
+        },
+        message: (messageEvent) => {
+            handleMessage(messageEvent.message)
         }
     })
 
-    pubnub.onMessage = (messageEvent) => {
-        handleMessage(messageEvent.message)
-    }
     subscription.subscribe()
 }
 
 const handleMessage = message => {
-    document.write(message)
+    console.log("here")
+    console.log(message)
+
+    document.getElementById("currTemp").innerHTML = message.temperature
+    
+}
+
+const write_record_to_database = message => {
+
 }
 

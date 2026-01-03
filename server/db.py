@@ -26,12 +26,16 @@ class Scanner(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     device_id = db.Column(db.Integer)
     device_name = db.Column(db.String(50))
-    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"))
+    user_email = db.Column(db.Integer, db.ForeignKey("app_user.email"))
+    max_temp = db.Column(db.Float)
+    min_temp = db.Column(db.Float)
 
-    def __init__(self, device_id, device_name, user_id):
+    def __init__(self, device_id, device_name, user_email, min_temp, max_temp):
         self.device_id = device_id
         self.device_name = device_name
-        self.user_id = user_id
+        self.user_email = user_email
+        self.min_temp = min_temp
+        self.max_temp = max_temp
 
 class ScannerReading(db.Model):
     __tablename__ = "scanner_reading"
@@ -66,3 +70,22 @@ def register_new_user(name, email, password_hash):
         return True
     else:
         return False
+    
+
+def get_user_scanners(email):
+    try:
+        scanners_query = Scanner.query.filter_by(user_email=email).all()
+        scanners_res = []
+        for scanner in scanners_query:
+            scanner_dict = {
+                "id": scanner.id,
+                "device_id": scanner.device_id,
+                "device_name": scanner.device_name,
+                "user_email": scanner.user_email,
+                "min_temp": scanner.min_temp,
+                "max_temp": scanner.max_temp
+            }
+            scanners_res.append(scanner_dict)
+        return scanners_res
+    except:
+        return []

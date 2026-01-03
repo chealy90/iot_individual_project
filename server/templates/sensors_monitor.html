@@ -3,10 +3,10 @@
     <h2>My Sensors</h2>
     {% for sensor in sensors %}
     <div>
-        <p>{{ sensor["sensor_name"] }}</p>
-        <p>Current Temperature: {{ sensor["sensor_current"] }}</p>
-        <p>Min: {{ sensor["sensor_min"] }} C</p>
-        <p>Max {{ sensor["sensor_max"] }} C</p>
+        <p>{{ sensor["device_name"] }}</p>
+        <p>Current Temperature: <span id="currTemp"></span></p>
+        <p>Min: {{ sensor["min_temp"] }} C</p>
+        <p>Max {{ sensor["max_temp"] }} C</p>
         <button>Manage</button>
     </div>
     {% endfor %}

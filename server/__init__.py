@@ -58,8 +58,9 @@ def sensors():
         "sensor_min": -10,
         "sensor_max": -3
     }
+    print(session["user_scanners"])
 
-    return render_template("sensors_monitor.html", sensors=[sensor1, sensor2])
+    return render_template("sensors_monitor.html", sensors=session["user_scanners"])
 
 
 
@@ -87,6 +88,7 @@ def login():
 
         session["email"] = email
         session["logged_in"] = 1
+        session["user_scanners"] = database.get_user_scanners(email)
 
         return redirect("/sensors")
 
