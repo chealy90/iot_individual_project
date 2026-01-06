@@ -89,3 +89,10 @@ def get_user_scanners(email):
         return scanners_res
     except:
         return []
+
+
+def write_temp(scanner, temperature, time):
+    try:
+        new_record = ScannerReading(scanner, time, temperature)
+    except:
+        print("Error")

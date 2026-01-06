@@ -135,6 +135,21 @@ def register():
             session["logged_in"] = 1
             return redirect("/sensors")
 
+
+@app.route('/write_temp', methods=["POST"])
+def write_temp():
+    data = request.get_json()
+
+
+    user = data["user_id"]
+    scanner = data["scanner_id"]
+    temperature = data["temp"]
+    time = data["time"]
+
+    try:
+        database.write_temp(user, scanner, temperature, time)
+    except:
+        print("Error")
         
 
 
