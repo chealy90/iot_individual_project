@@ -3,3 +3,5 @@
 /hardware/.env
 /server/.env
 .vscode
+
+/server/__pycache__

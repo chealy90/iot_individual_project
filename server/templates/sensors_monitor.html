@@ -2,12 +2,12 @@
 {% block body %}
     <h2>My Sensors</h2>
     {% for sensor in sensors %}
-    <div data-id="{{ sensor["device_id"] }}">
+    <div id="sensor_container_{{ sensor["device_id"] }}">
         <p>{{ sensor["device_name"] }}</p>
         <p>Current Temperature: <span id="currTemp_{{ sensor["device_id"] }}"></span></p>
         <p>Min: {{ sensor["min_temp"] }} C</p>
         <p>Max {{ sensor["max_temp"] }} C</p>
-        <button>Manage</button>
+        <button onClick="enableEdit({{ sensor }})">Manage</button>
     </div>
     {% endfor %}
 {% endblock %}
