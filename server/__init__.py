@@ -58,8 +58,9 @@ def sensors():
         "sensor_min": -10,
         "sensor_max": -3
     }
+    print(session["user_scanners"])
 
-    return render_template("sensors_monitor.html", sensors=[sensor1, sensor2])
+    return render_template("sensors_monitor.html", sensors=session["user_scanners"])
 
 
 
@@ -87,6 +88,7 @@ def login():
 
         session["email"] = email
         session["logged_in"] = 1
+        session["user_scanners"] = database.get_user_scanners(email)
 
         return redirect("/sensors")
 
@@ -133,6 +135,23 @@ def register():
             session["logged_in"] = 1
             return redirect("/sensors")
 
+
+@app.route('/write_temp', methods=["POST"])
+def write_temp():
+    data = request.get_json()
+
+
+    
+    scanner = data["scanner"]
+    temperature = data["temperature"]
+    time = data["time"]
+
+    try:
+        database.write_temp(time, scanner, temperature)
+    except:
+        print("Error")
+
+    return redirect("/sensors")
         
 
 
