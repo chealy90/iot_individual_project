@@ -141,15 +141,17 @@ def write_temp():
     data = request.get_json()
 
 
-    user = data["user_id"]
-    scanner = data["scanner_id"]
-    temperature = data["temp"]
+    
+    scanner = data["scanner"]
+    temperature = data["temperature"]
     time = data["time"]
 
     try:
-        database.write_temp(user, scanner, temperature, time)
+        database.write_temp(time, scanner, temperature)
     except:
         print("Error")
+
+    return redirect("/sensors")
         
 
 

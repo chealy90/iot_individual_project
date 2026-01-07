@@ -4,12 +4,11 @@ let pubnub
 
 const DB_WRITE_INTERVAL = 1800 //write temp to db every 30 mins under normal condititions
 let lastWrite = new Date()
-let sensorsList
 
 
 
-const setupPubNub = (sensors) => {
-    sensorsList = sensors
+
+const setupPubNub = () => {
     pubnub = new PubNub({
         publishKey: "pub-c-3e946942-f546-48a4-8669-04ddff6b7152",
         subscribeKey: "sub-c-f0db3e16-0d07-4cf1-967f-0fcc888bcf2f",
@@ -32,28 +31,32 @@ const setupPubNub = (sensors) => {
 }
 
 const handleMessage = message => {
-    console.log("here")
-    console.log(message)
-    let sensor = sensorsList.filter(sensor => sensor["device_id"] === message["device_id"])[0]
+    //let sensor = sessionStorage["user_scanners"].filter(sensor => sensor["device_id"] === message["device_id"])[0]
+    //console.log(sensor)
 
+    /*
     //always write if out of range
     if (message.temperature > sensor.max_temp || message.temperature < sensor.min_temp){
         fetch("/write_to_db")
     }
-    
+        */
+    console.log(message)
+    console.log(document.getElementById(`currTemp_${message.device_id}`))
+    document.getElementById(`currTemp_${message.device_id}`).innerHTML = message.temperature
 
-    document.getElementById("currTemp").innerHTML = message.temperature
+    write_record_to_database(message.time, message.device_id, message.temperature)
+
     
 }
 
-const write_record_to_database = (user_id, scanner_id, temp) => {
+const write_record_to_database = (time, scanner_id, temp) => {
     fetch("/write_temp", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            user: user_id,
+            time: time,
             scanner: scanner_id,
             temperature: temp
         })
@@ -62,7 +65,8 @@ const write_record_to_database = (user_id, scanner_id, temp) => {
         if (!res.ok){
             console.log("Network response not ok")
         }
-        window.location.reload()
+        //window.location.reload()
+        console.log("ok")
     })
     .catch(err => {
         console.log(err)

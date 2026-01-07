@@ -91,8 +91,12 @@ def get_user_scanners(email):
         return []
 
 
-def write_temp(scanner, temperature, time):
+def write_temp(time, scanner, temperature):
     try:
         new_record = ScannerReading(scanner, time, temperature)
+        db.session.add(new_record)
+        db.session.commit()
+        print("Record Added")
+        return redirect("/sensors")
     except:
         print("Error")

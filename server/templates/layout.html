@@ -6,7 +6,6 @@
     , initial-scale=1.0">
     <title>Temp O Matic</title>
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.10.2.0.js"></script>
-    <script src="static/js/main.js"></script>
 </head>
 <body onload="setupPubNub()">
     <header>
@@ -23,5 +22,6 @@
     </header>
     {%  block body %}
     {%  endblock %}
+    <script src="static/js/main.js" defer></script>
 </body>
 </html>
