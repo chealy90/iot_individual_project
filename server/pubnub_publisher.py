@@ -14,6 +14,7 @@ pnconfig.ssl = True
 pubnub = PubNub(pnconfig)
 CHANNEL = os.getenv("PUBNUB_CHANNEL")
 
+
 def publish_msg(message):
     envelope = pubnub.publish().channel(CHANNEL).message(message).sync()
 
@@ -21,8 +22,3 @@ def publish_msg(message):
         print(f"Publish Error: {envelope.status.error_data}")
     else:
         print(f'Published with timetoken: {envelope.result.timetoken}')
-
-
-
-
-

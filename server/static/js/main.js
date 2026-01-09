@@ -30,6 +30,9 @@ const setupPubNub = () => {
     subscription.subscribe()
 }
 
+
+
+
 const handleMessage = message => {
     //let sensor = sessionStorage["user_scanners"].filter(sensor => sensor["device_id"] === message["device_id"])[0]
     //console.log(sensor)
@@ -40,6 +43,9 @@ const handleMessage = message => {
         fetch("/write_to_db")
     }
         */
+    if (message.type !== "update_sensor"){
+        return
+    }
     console.log(message)
     console.log(document.getElementById(`currTemp_${message.device_id}`))
     document.getElementById(`currTemp_${message.device_id}`).innerHTML = message.temperature
@@ -72,4 +78,58 @@ const write_record_to_database = (time, scanner_id, temp) => {
         console.log(err)
     })
 }
+
+const enableEdit = (sensor) => {
+    console.log(sensor)
+    const editBoxHtml = `
+        <form action="/update_sensor" method="post">
+            <input type="hidden"
+                name="sensor_id"
+                value="${sensor.device_id}"
+            />
+
+
+            <label>Device Name</label>
+            <input 
+                type="text"
+                value="${sensor.device_name}"
+                name="device_name"
+                required
+            />
+            <br>
+
+            <label>Min Temp</label>
+            <input 
+                type="text"
+                value="${sensor.min_temp}"
+                name="min_temp"
+                max="60"
+                min="-20"
+                required
+            />
+            <br>
+
+            <label>Max Temp</label>
+            <input 
+                type="text"
+                value="${sensor.max_temp}"
+                name="max_temp"
+                max="60"
+                min="-20"
+                required
+            />
+            <br>
+
+            <button type="submit">Save</button>
+            <button type="button" onClick="discardChanges()">Discard</button>
+        </form>
+    `
+    document.getElementById(`sensor_container_${sensor.device_id}`).innerHTML = editBoxHtml
+}
+
+const discardChanges = () => {
+    window.location.reload()
+}
+
+
 

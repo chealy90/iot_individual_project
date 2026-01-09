@@ -100,3 +100,16 @@ def write_temp(time, scanner, temperature):
         return redirect("/sensors")
     except:
         print("Error")
+
+
+def update_sensor(id, name, min_temp, max_temp):
+    try:
+        scanner = Scanner.query.filter_by(device_id=int(id)).first()
+        scanner.device_name = name
+        scanner.min_temp = min_temp
+        scanner.max_temp = max_temp
+        db.session.commit()
+        print("db ")
+
+    except Exception as e:
+        print(e)
