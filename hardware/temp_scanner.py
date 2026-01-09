@@ -2,10 +2,11 @@
 
 import adafruit_dht
 import digitalio
-from pubnub_client import publish_msg
+from pubnub_client import *
 import time
 import datetime
 import asyncio
+import json
 
 
 '''
@@ -16,11 +17,36 @@ D17 - Green LED
 
 '''
 
-
 #IO Pins
 from board import D2, D3, D4, D17 #GPIO PINS
 
+#scanner values
+DEVICE_ID = 1
 MIN_TEMP = 20
+MAX_TEMP = 30
+
+
+
+#subscription
+subscription = pubnub.channel(CHANNEL).subscription()
+subscription.on_message = lambda message: handle_message(message)
+subscription.subscribe()
+
+
+def handle_message(message):
+    global MIN_TEMP, MAX_TEMP
+    print(message.message)
+    msg = json.loads(json.dumps(message.message))
+
+    if msg.message.get("message_type") == "update_sensor":
+        MAX_TEMP = msg.message.get("max_temp")
+        MIN_TEMP = msg.message.get("min_temp")
+        
+
+
+
+
+
 
 
 async def flash_led(led):
@@ -73,6 +99,8 @@ async def main():
                 }
                 print(json_msg)
                 publish_msg(json_msg)
+                print(MIN_TEMP)
+                print(MAX_TEMP)
 
                 #LED / Buzzer
                 if temperature < MIN_TEMP:
