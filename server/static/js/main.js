@@ -30,6 +30,9 @@ const setupPubNub = () => {
     subscription.subscribe()
 }
 
+
+
+
 const handleMessage = message => {
     //let sensor = sessionStorage["user_scanners"].filter(sensor => sensor["device_id"] === message["device_id"])[0]
     //console.log(sensor)
@@ -40,6 +43,9 @@ const handleMessage = message => {
         fetch("/write_to_db")
     }
         */
+    if (message.type !== "update_sensor"){
+        return
+    }
     console.log(message)
     console.log(document.getElementById(`currTemp_${message.device_id}`))
     document.getElementById(`currTemp_${message.device_id}`).innerHTML = message.temperature

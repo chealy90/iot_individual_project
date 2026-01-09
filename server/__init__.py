@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 #from . import db as database
 import db as database
-
+from pubnub_publisher import publish_msg
 
 load_dotenv()
 
@@ -170,8 +170,15 @@ def update_sensor():
     if min_temp > max_temp:
         return render_template("/sensors", error="Min Temp must be less than max temp")
     
+    #db
     database.update_sensor(device_id, device_name, min_temp, max_temp)
+
+    #session
     session["user_scanners"] = database.get_user_scanners(session["email"])
+
+    #pubnub
+    message = {"message_type": "update_sensor", "min_temp": min_temp, "max_temp": max_temp}
+    publish_msg(message)
 
     return redirect("/sensors")
 
