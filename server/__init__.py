@@ -154,6 +154,26 @@ def write_temp():
     return redirect("/sensors")
         
 
+@app.route('/update_sensor', methods=["POST"])
+def update_sensor():
+    device_name = request.form["device_name"]
+    device_id = request.form["sensor_id"]
+    min_temp = int(request.form["min_temp"])
+    max_temp = int(request.form["max_temp"])
+
+    if len(device_name) == 0:
+        return render_template("/sensors", error="Device name is required")
+    
+    if (min_temp < -20 or min_temp  > 60) or (max_temp < -20 or max_temp > 60) or not min_temp or not max_temp:
+        return render_template("/sensors", error="Please enter a valid min and max temp between -20 and 60")
+    
+    if min_temp > max_temp:
+        return render_template("/sensors", error="Min Temp must be less than max temp")
+    
+    database.update_sensor(device_id, device_name, min_temp, max_temp)
+    session["user_scanners"] = database.get_user_scanners(session["email"])
+
+    return redirect("/sensors")
 
 
 

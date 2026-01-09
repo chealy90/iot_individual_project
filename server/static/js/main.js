@@ -76,32 +76,53 @@ const write_record_to_database = (time, scanner_id, temp) => {
 const enableEdit = (sensor) => {
     console.log(sensor)
     const editBoxHtml = `
-        <label>Device Name</label>
-        <input 
-            type="text"
-            value="${sensor.device_name}"
-        />
-        <br>
+        <form action="/update_sensor" method="post">
+            <input type="hidden"
+                name="sensor_id"
+                value="${sensor.device_id}"
+            />
 
-        <label>Min Temp</label>
-        <input 
-            type="text"
-            value="${sensor.min_temp}"
-        />
-        <br>
 
-        <label>Max Temp</label>
-        <input 
-            type="text"
-            value="${sensor.max_temp}"
-        />
-        <br>
+            <label>Device Name</label>
+            <input 
+                type="text"
+                value="${sensor.device_name}"
+                name="device_name"
+                required
+            />
+            <br>
 
-        <button>Save</button>
-        <button>Discard</button>
+            <label>Min Temp</label>
+            <input 
+                type="text"
+                value="${sensor.min_temp}"
+                name="min_temp"
+                max="60"
+                min="-20"
+                required
+            />
+            <br>
+
+            <label>Max Temp</label>
+            <input 
+                type="text"
+                value="${sensor.max_temp}"
+                name="max_temp"
+                max="60"
+                min="-20"
+                required
+            />
+            <br>
+
+            <button type="submit">Save</button>
+            <button type="button" onClick="discardChanges()">Discard</button>
+        </form>
     `
-
     document.getElementById(`sensor_container_${sensor.device_id}`).innerHTML = editBoxHtml
+}
+
+const discardChanges = () => {
+    window.location.reload()
 }
 
 
