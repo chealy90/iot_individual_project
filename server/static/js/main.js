@@ -6,13 +6,12 @@ const DB_WRITE_INTERVAL = 1800 //write temp to db every 30 mins under normal con
 let lastWrite = new Date()
 
 
-
-
 const setupPubNub = () => {
     pubnub = new PubNub({
         publishKey: "pub-c-3e946942-f546-48a4-8669-04ddff6b7152",
         subscribeKey: "sub-c-f0db3e16-0d07-4cf1-967f-0fcc888bcf2f",
         userId: "web-user-" + Math.floor(Math.random() * 1000),
+        ssl: true
     })
 
     const channel = pubnub.channel(appChannel)
@@ -43,13 +42,10 @@ const handleMessage = message => {
         fetch("/write_to_db")
     }
         */
-    if (message.type !== "update_sensor"){
+    if (message.type === "update_sensor"){
         return
     }
-    console.log(message)
-    console.log(document.getElementById(`currTemp_${message.device_id}`))
     document.getElementById(`currTemp_${message.device_id}`).innerHTML = message.temperature
-
     write_record_to_database(message.time, message.device_id, message.temperature)
 
     
@@ -130,6 +126,10 @@ const enableEdit = (sensor) => {
 const discardChanges = () => {
     window.location.reload()
 }
+
+document.addEventListener("DOMContentLoaded", function() { setupPubNub() })
+
+
 
 
 

@@ -7,6 +7,10 @@ import time
 import datetime
 import asyncio
 import json
+from dotenv import load_dotenv
+import os
+
+
 
 
 '''
@@ -17,11 +21,13 @@ D17 - Green LED
 
 '''
 
+
 #IO Pins
 from board import D2, D3, D4, D17 #GPIO PINS
 
 #scanner values
-DEVICE_ID = 1
+load_dotenv()
+DEVICE_ID = os.getenv("DEVICE_ID")
 MIN_TEMP = 20
 MAX_TEMP = 30
 
@@ -94,8 +100,8 @@ async def main():
                 msg = f"{curr_time} Temp: {temperature} ° C"
                 json_msg = {
                     "time": curr_time,
-                    "temperature": temperature
-
+                    "temperature": temperature,
+                    "device_id": DEVICE_ID
                 }
                 print(json_msg)
                 publish_msg(json_msg)
