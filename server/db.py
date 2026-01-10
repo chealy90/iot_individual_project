@@ -97,7 +97,6 @@ def write_temp(time, scanner, temperature):
         db.session.add(new_record)
         db.session.commit()
         print("Record Added")
-        return redirect("/sensors")
     except:
         print("Error")
 
