@@ -16,3 +16,4 @@ The user site allows the user to see their sensors readings history, configure m
 
 DS18B20 would work best, DHT22 is fine for fridges
 
+Snowflake by: https://www.flaticon.com/authors/dixit-lakhani-02

@@ -1,13 +1,27 @@
 {% extends "layout.html" %}
 {% block body %}
-    <h2>My Sensors</h2>
+    <h2 class="sensor-page-title">My Sensors</h2>
+
     {% for sensor in sensors %}
-    <div id="sensor_container_{{ sensor["device_id"] }}">
-        <p>{{ sensor["device_name"] }}</p>
-        <p>Current Temperature: <span id="currTemp_{{ sensor["device_id"] }}"></span></p>
-        <p>Min: {{ sensor["min_temp"] }} C</p>
-        <p>Max {{ sensor["max_temp"] }} C</p>
-        <button onClick="enableEdit({{ sensor }})">Manage</button>
+    <div id="sensor_container_{{ sensor["device_id"] }}" class="sensor-card">
+        <div class="sensor-info">
+            <p class="sensor-name">{{ sensor["device_name"] }}</p>
+
+            <p>
+                Current Temperature:
+                <span id="currTemp_{{ sensor["device_id"] }}" class="sensor-temp"></span>
+            </p>
+
+            <p class="sensor-range">
+                Min: {{ sensor["min_temp"] }} °C |
+                Max: {{ sensor["max_temp"] }} °C
+            </p>
+        </div>
+
+        <button class="sensor-btn" onClick="enableEdit({{ sensor }})">
+            Manage
+        </button>
     </div>
     {% endfor %}
+
 {% endblock %}

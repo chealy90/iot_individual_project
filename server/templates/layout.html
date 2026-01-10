@@ -2,24 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=
-    , initial-scale=1.0">
-    <title>Temp O Matic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tempify</title>
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.10.2.0.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/snow-flake.png') }}">
+
 </head>
 <body onload="setupPubNub()">
-    <header>
-        <p>Temp O Matic</p>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/sensors">Sensors</a>
-            {% if session.get("email") %}
-                <a href="/logout">Logout</a>
-            {% else %}
-                <a href="/login">Login</a>
-            {% endif %}
-        </nav>
+    <header class="site-header">
+        <div class="header-container">
+            <div class="header-title">
+                <img class="logo" src="{{ url_for('static', filename='images/snow-flake.png') }}" alt="">
+                <p class="title">Tempify</p>
+            </div>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/sensors">Sensors</a>
+                {% if session.get("email") %}
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                {% endif %}
+            </nav>
+        </div>
     </header>
+
     {%  block body %}
     {%  endblock %}
     <script src="static/js/main.js" defer></script>
