@@ -9,9 +9,11 @@ import asyncio
 import json
 from dotenv import load_dotenv
 import os
+from board import D2, D3, D4, D17
 
 
-
+#Load env 
+load_dotenv()
 
 '''
 D2 - Scanner
@@ -21,15 +23,24 @@ D17 - Green LED
 
 '''
 
+#File I/O methods for temp file
+def read_temps_file(filepath):
+    with open(filepath, "r") as f:
+        return json.load(f)
 
-#IO Pins
-from board import D2, D3, D4, D17 #GPIO PINS
+def write_temps_file(filepath, data):
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(data, f)
+
+
 
 #scanner values
-load_dotenv()
 DEVICE_ID = os.getenv("DEVICE_ID")
-MIN_TEMP = 20
-MAX_TEMP = 30
+initial_temps = read_temps_file("temps.json")
+MAX_TEMP = initial_temps["MAX_TEMP"]
+MIN_TEMP = initial_temps["MIN_TEMP"]
+
+
 
 
 
@@ -42,11 +53,18 @@ subscription.subscribe()
 def handle_message(message):
     global MIN_TEMP, MAX_TEMP
     print(message.message)
-    msg = json.loads(json.dumps(message.message))
+    msg = message.message
 
-    if msg.message.get("message_type") == "update_sensor":
-        MAX_TEMP = msg.message.get("max_temp")
-        MIN_TEMP = msg.message.get("min_temp")
+    if msg.get("message_type") == "update_sensor":
+        MAX_TEMP = msg.get("max_temp")
+        MIN_TEMP = msg.get("min_temp")
+
+        new_json_data = {
+            "MAX_TEMP": MAX_TEMP,
+            "MIN_TEMP": MIN_TEMP
+        }
+
+        write_temps_file("temps.json", new_json_data)
         
 
 
@@ -96,7 +114,7 @@ async def main():
         while True:
             try:
                 temperature = dht_device.temperature
-                curr_time = datetime.datetime.now()
+                curr_time = datetime.datetime.now().isoformat()
                 msg = f"{curr_time} Temp: {temperature} ° C"
                 json_msg = {
                     "time": curr_time,
@@ -120,6 +138,9 @@ async def main():
 
     except:
         print("Error setting up device")
+
+
+
 
 if __name__ == "__main__":
     asyncio.run(main())
