@@ -33,22 +33,36 @@ const setupPubNub = () => {
 
 
 const handleMessage = message => {
-    //let sensor = sessionStorage["user_scanners"].filter(sensor => sensor["device_id"] === message["device_id"])[0]
-    //console.log(sensor)
-
-    /*
-    //always write if out of range
-    if (message.temperature > sensor.max_temp || message.temperature < sensor.min_temp){
-        fetch("/write_to_db")
-    }
-        */
+    let sensor_id = message.device_id
+    let min_temp = parseFloat(document.getElementById("sensor_range_p").innerText.split(" ")[1])
+    let max_temp = parseFloat(document.getElementById("sensor_range_p").innerText.split(" ")[5])
+    console.log(min_temp)
+    console.log(max_temp)
+    
     if (message.type === "update_sensor"){
         return
     }
-    document.getElementById(`currTemp_${message.device_id}`).innerHTML = message.temperature
-    write_record_to_database(message.time, message.device_id, message.temperature)
 
-    
+    //update document
+    document.getElementById(`currTemp_${message.device_id}`).innerHTML = message.temperature 
+
+    //write if out of bounds
+    if (message.temperature > max_temp || message.temperature < min_temp){
+        document.getElementById(`currTemp_${message.device_id}`).classList.remove("sensor-temp-ok")
+        document.getElementById(`currTemp_${message.device_id}`).classList.add("sensor-temp-bad")
+        write_record_to_database(message.time, message.device_id, message.temperature)
+    }
+    else {
+        document.getElementById(`currTemp_${message.device_id}`).classList.add("sensor-temp-ok")
+        document.getElementById(`currTemp_${message.device_id}`).classList.remove("sensor-temp-bad")
+    }
+    //write every half hour
+    let now = new Date()
+    if (now - lastWrite > DB_WRITE_INTERVAL){
+        write_record_to_database(message.time, message.device_id, message.temperature)
+        lastWrite = now
+    }
+
 }
 
 const write_record_to_database = (time, scanner_id, temp) => {
