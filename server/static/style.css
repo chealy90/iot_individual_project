@@ -396,7 +396,12 @@
 }
 
 /* Temperature */
-.sensor-temp {
+.sensor-temp-ok {
+    font-weight: 600;
+    color: #22c913;
+}
+
+.sensor-temp-bad {
     font-weight: 600;
     color: #b91c1c;
 }

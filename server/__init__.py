@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, abort
 from flask_session import Session
 from dotenv import load_dotenv
 import os
@@ -11,7 +11,7 @@ from pubnub_publisher import publish_msg
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "secret"
+app.secret_key = os.getenv("APP_SECRET")
 
 #set up db
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URI")
@@ -45,21 +45,6 @@ def index():
 @app.route('/sensors', methods=["GET", "POST"])
 @login_is_required
 def sensors():
-    sensor1 = {
-        "sensor_name": "Fridge Sensor",
-        "sensor_current": 1.4,
-        "sensor_min": 1,
-        "sensor_max": 4
-    }
-
-    sensor2 = {
-        "sensor_name": "Freezer Sensor",
-        "sensor_current": -5,
-        "sensor_min": -10,
-        "sensor_max": -3
-    }
-    print(session["user_scanners"])
-
     return render_template("sensors_monitor.html", sensors=session["user_scanners"])
 
 
