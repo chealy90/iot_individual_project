@@ -143,8 +143,8 @@ def write_temp():
 def update_sensor():
     device_name = request.form["device_name"]
     device_id = request.form["sensor_id"]
-    min_temp = int(request.form["min_temp"])
-    max_temp = int(request.form["max_temp"])
+    min_temp = float(request.form["min_temp"])
+    max_temp = float(request.form["max_temp"])
 
     if len(device_name) == 0:
         return render_template("/sensors", error="Device name is required")
